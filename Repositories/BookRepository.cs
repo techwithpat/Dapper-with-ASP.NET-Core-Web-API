@@ -1,35 +1,79 @@
 ﻿using BookAPI.Models;
-using System;
+using Dapper;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 
 namespace BookAPI.Repositories
 {
     public class BookRepository : IBookRepository
     {
-        public Task<Book> Create(Book book)
+        private readonly IConfiguration _configuration;
+        private string _connectionString;
+
+        public BookRepository(IConfiguration configuration)
         {
-            throw new NotImplementedException();
+            _configuration = configuration;
+            _connectionString = _configuration.GetConnectionString("Default");
         }
 
-        public Task<IEnumerable<Book>> Get()
+        public async Task<Book> Create(Book book)
         {
-            throw new NotImplementedException();
+            var sql = @"INSERT INTO Books (Title, Author, Description) VALUES (@Title, @Author, @Description)";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                _ = await connection.ExecuteAsync(sql, new { book.Title, book.Author, book.Description })
+                    .ConfigureAwait(false);
+
+                return book;
+            }
         }
 
-        public Task<Book> Get(int id)
+        public async Task<IEnumerable<Book>> Get()
         {
-            throw new NotImplementedException();
+            var sql = "SELECT * FROM Books";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var books = await connection.QueryAsync<Book>(sql).ConfigureAwait(false);
+                return books;
+            }
         }
 
-        public Task Update(Book book)
+        public async Task<Book> Get(int id)
         {
-            throw new NotImplementedException();
+            var sql = "SELECT * FROM Books WHERE Id = @BookId";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var book = await connection.QueryFirstOrDefaultAsync<Book>(sql, new { BookId = id })
+                                           .ConfigureAwait(false);
+                return book;
+            }
         }
 
-        public Task Delete(int id)
+        public async Task Update(Book book)
         {
-            throw new NotImplementedException();
+            var sql = "UPDATE Books SET Title='@Title', Author=@Author, Description=@Description WHERE Id = @Id;";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                _ = await connection.ExecuteAsync(sql, new {book.Id, book.Title, book.Author, book.Description})
+                    .ConfigureAwait(false);
+            }
         }
+
+        public async Task Delete(int id)
+        {
+            var sql = "DELETE from Books WHERE Id = @Id;";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                _ = await connection.ExecuteAsync(sql, new { Id = id })
+                    .ConfigureAwait(false);
+            }
+        }       
     }
 }
