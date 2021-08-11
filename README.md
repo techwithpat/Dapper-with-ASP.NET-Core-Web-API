@@ -7,7 +7,7 @@ The following project is an ASP.NET Core Web API that talks to a SQL Server data
 # Description
 The API manages a book library, it exposes endpoints for CRUD operations over a Book table.
 
-#Setup
+# Setup
 1. Create the Book table in the database
 ```sql
 SET ANSI_NULLS ON
@@ -38,8 +38,8 @@ GO
 4. Press F5
 
 # Built With
- ASP.NET Core 5.0
+ ASP.NET Core 5.0<br/>
  C#
 
-#Author
+# Author
 Patrick Tshibanda
