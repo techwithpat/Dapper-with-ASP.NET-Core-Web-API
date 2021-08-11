@@ -1,3 +1,2 @@
-# Web API with ASP.NET Core
-Source code for YouTube tutorial on how to create a Web API with ASP.NET Core.
-The API exposes endpoints for creating, reading, updating or deleting books.
+# Dapper with ASP.NET Core Web API
+The following code base demonstrates use of Dapperin ASP.NET Core Web API.
