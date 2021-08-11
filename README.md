@@ -26,8 +26,10 @@ CREATE TABLE [dbo].[Books](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 ```
-2.Clone the repo
-
+2. Clone the repo
+```
+git clone https://github.com/techwithpat/Dapper-with-ASP.NET-Core-Web-API.git
+```
 
 3. Update connection string in appsettings.json
 ```javascript
